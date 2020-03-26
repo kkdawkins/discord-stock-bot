@@ -23,7 +23,11 @@ class MyClient(discord.Client):
             # We only want to react to symbols - other things should be ignored
             if symbol.isalpha():
                 url = 'https://cloud.iexapis.com/stable/stock/' + symbol + '/quote?token=iexKey'
-                response = requests.get(url).json()
+                response = requests.get(url)
+                if response.status_code != 200:
+                    await message.channel.send('Error processing stock symbol')
+                    return
+                response = response.json()
                 answer = symbol + ' is trading at $' + str(response['iexRealtimePrice']) + ". "
                 if (response['change'] >= 0):
                     answer = answer + 'It is up ' + str(response['changePercent'] * 100) + '% ($' + str(response['change']) + ').'
