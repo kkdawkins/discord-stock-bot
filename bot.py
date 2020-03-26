@@ -3,7 +3,7 @@ import requests
 import os
 
 class MyClient(discord.Client):
-    iexKey = os.environ('IEX_KEY')
+    iexKey = os.environ['IEX_KEY']
     async def on_ready(self):
         print('Logged in as ', self.user)
 
@@ -38,4 +38,4 @@ class MyClient(discord.Client):
                 await message.channel.send('Error processing stock symbol.')
 print ('starting')
 bot = MyClient()
-bot.run(os.environ('DISCORD_KEY'))
+bot.run(os.environ['DISCORD_KEY'])
