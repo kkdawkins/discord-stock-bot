@@ -23,12 +23,9 @@ class MyClient(discord.Client):
         
         if message.content.startswith('$'):
             symbol = message.content.replace('$','')
-            # We only want to react to symbols - other things should be ignored
-            if symbol.isalpha():
-                response = iex_module.get_quote(symbol, self.iexKey)
-                await message.channel.send(embed=response)
-            else:
-                await message.channel.send('Error processing stock symbol.')
+            response = iex_module.get_quote(symbol, self.iexKey)
+            await message.channel.send(embed=response)
+            
 print ('starting')
 bot = MyClient()
 bot.run(os.environ['DISCORD_KEY'])

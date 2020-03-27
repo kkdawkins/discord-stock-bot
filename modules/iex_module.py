@@ -13,10 +13,17 @@ def get_quote(symbol, iex_key):
 
     if response.status_code != 200:
         error_tracking = uuid.uuid4()
-        print('[' + str(error_tracking) + '] HTTP Error ' + str(response.status_code) + ' message: ' + str(response.content))
-        embed.add_field(name="IEX HTTP Error", value=str(response.status_code))
-        embed.add_field(name="Tracking Number", value=str(error_tracking))
-        return embed
+        if response.status_code == 404:
+            print('[' + str(error_tracking) + '] HTTP Error ' + str(response.status_code) + ' message: ' + str(response.content))
+            embed.add_field(name='Symbol', value=symbol)
+            embed.add_field(name='Message', value='Symbol was not found on IEX.')
+            embed.add_field(name='Tracking Number', value=str(error_tracking))
+            return embed
+        else:
+            print('[' + str(error_tracking) + '] HTTP Error ' + str(response.status_code) + ' message: ' + str(response.content))
+            embed.add_field(name='IEX HTTP Error', value=str(response.status_code))
+            embed.add_field(name='Tracking Number', value=str(error_tracking))
+            return embed
     
     response = response.json()
 
