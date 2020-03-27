@@ -2,8 +2,11 @@ import discord
 import requests
 import os
 
+from modules import iex_module
+
 class MyClient(discord.Client):
     iexKey = os.environ['IEX_KEY']
+
     async def on_ready(self):
         print('Logged in as ', self.user)
 
@@ -22,18 +25,8 @@ class MyClient(discord.Client):
             symbol = message.content.replace('$','')
             # We only want to react to symbols - other things should be ignored
             if symbol.isalpha():
-                url = 'https://cloud.iexapis.com/stable/stock/' + symbol + '/quote?token=' + self.iexKey
-                response = requests.get(url)
-                if response.status_code != 200:
-                    await message.channel.send('Error processing stock symbol HTTP Code: ' + str(response.status_code))
-                    return
-                response = response.json()
-                answer = symbol + ' is trading at $' + str(response['iexRealtimePrice']) + ". "
-                if (response['change'] >= 0):
-                    answer = answer + 'It is up ' + str(response['changePercent'] * 100) + '% ($' + str(response['change']) + ').'
-                else:
-                    answer = answer + 'It is down ' + str(response['changePercent'] * 100) + '% ($' + str(response['change']) + ').'
-                await message.channel.send(answer)
+                response = iex_module.get_quote(symbol, self.iexKey)
+                await message.channel.send(response)
             else:
                 await message.channel.send('Error processing stock symbol.')
 print ('starting')
