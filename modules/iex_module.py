@@ -13,7 +13,7 @@ def get_quote(symbol, iex_key):
 
     if response.status_code != 200:
         error_tracking = uuid.uuid4()
-        print('[' + error_tracking + '] HTTP Error ' + str(response.status_code) + ' message: ' + response.content)
+        print('[' + str(error_tracking) + '] HTTP Error ' + str(response.status_code) + ' message: ' + str(response.content))
         embed.add_field(name="IEX HTTP Error", value=str(response.status_code))
         embed.add_field(name="Tracking Number", value=str(error_tracking))
         return embed
